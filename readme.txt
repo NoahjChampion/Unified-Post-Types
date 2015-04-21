@@ -1,5 +1,5 @@
 === Unified Post Types ===
-Contributors: danielbachhuber
+Contributors: fusionengineering, danielbachhuber
 Tags: post types, admin
 Requires at least: 4.1
 Tested up to: 4.2
