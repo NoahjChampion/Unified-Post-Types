@@ -118,8 +118,8 @@ class Unified_Post_Types {
 		$primary_post_type = $this->get_primary_post_type();
 		$primary_menu_key = 'post' === $primary_post_type ? 'edit.php' : 'edit.php?post_type=' . $primary_post_type;
 		$screen = get_current_screen();
-		foreach( $menu as $key => $menu_item ) {
-			foreach( $unified_post_types as $post_type ) {
+		foreach ( $menu as $key => $menu_item ){
+			foreach ( $unified_post_types as $post_type ){
 				// Remove links to unified posts that aren't the primary
 				if ( ! empty( $menu_item[2] ) && 'edit.php?post_type=' . $post_type === $menu_item[2] && $post_type !== $primary_post_type ) {
 					unset( $menu[ $key ] );
@@ -129,7 +129,7 @@ class Unified_Post_Types {
 
 			if ( ! empty( $menu_item[2] ) && $primary_menu_key === $menu_item[2] ) {
 				$menu[ $key ][0] = esc_html__( 'Content', 'unified-post-types' );
-				foreach( $submenu[ $primary_menu_key ] as $key => $submenu_item ) {
+				foreach ( $submenu[ $primary_menu_key ] as $key => $submenu_item ){
 					if ( $submenu_item[2] === $primary_menu_key ) {
 						$submenu[ $primary_menu_key ][ $key ][0] = esc_html__( 'All Content', 'unified-post-types' );
 					}
@@ -200,7 +200,9 @@ class Unified_Post_Types {
 
 }
 
+// @codingStandardsIgnoreStart
 function Unified_Post_Types() {
 	return Unified_Post_Types::get_instance();
 }
+// @codingStandardsIgnoreEnd
 add_action( 'after_setup_theme', 'Unified_Post_Types' );
