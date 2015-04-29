@@ -143,6 +143,10 @@ class Unified_Post_Types {
 		}
 
 		wp_enqueue_script( 'unified-post-types', plugins_url( 'assets/js/unified-post-types.js', __FILE__ ), array( 'jquery' ), UNIFIED_POST_TYPES_VERSION );
+		wp_localize_script( 'unified-post-types', 'UnifiedPostTypesSettings', array(
+			'primary_post_type'       => $this->get_primary_post_type(),
+			'unified_post_types'      => $this->get_unified_post_types(),
+			) );
 	}
 
 	/**
