@@ -75,7 +75,7 @@ class Unified_Post_Types {
 			return false;
 		}
 		$screen = get_current_screen();
-		if ( $screen && 'edit' === $screen->base && ! empty( $screen->post_type ) && $this->get_primary_post_type() === $screen->post_type ) {
+		if ( $screen && 'edit' === $screen->base && ! empty( $screen->post_type ) && in_array( $screen->post_type, $this->get_unified_post_types() ) ) {
 			return true;
 		} else {
 			return false;
