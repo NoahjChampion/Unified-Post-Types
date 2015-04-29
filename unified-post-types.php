@@ -32,6 +32,7 @@ class Unified_Post_Types {
 		add_action( 'pre_get_posts', array( $this, 'action_pre_get_posts' ) );
 		add_action( 'wp', array( $this, 'action_wp_reset_primary_post_type' ) );
 		add_action( 'admin_menu', array( $this, 'action_admin_menu_late' ), 100 );
+		add_action( 'restrict_manage_posts', array( $this, 'action_restrict_manage_posts' ), 9 ); // More important than other filtering
 	}
 
 	/**
@@ -90,8 +91,10 @@ class Unified_Post_Types {
 			return;
 		}
 
-		$query->set( 'post_type', $this->get_unified_post_types() );
-		$this->global_post_type_needs_reset = true;
+		if ( empty( $_GET['post_type'] ) ) {
+			$query->set( 'post_type', $this->get_unified_post_types() );
+			$this->global_post_type_needs_reset = true;
+		}
 
 	}
 
@@ -136,6 +139,26 @@ class Unified_Post_Types {
 				}
 			}
 		}
+
+	}
+
+	/**
+	 * Add a post type filter dropdown to "Manage Posts" table
+	 */
+	public function action_restrict_manage_posts() {
+
+		if ( ! $this->is_unified_post_type_screen() ) {
+			return;
+		}
+
+		echo '<label class="screen-reader-text" for="post_type">' . esc_html__( 'Filter by post type', 'unified-post-types' ) . '</label>';
+		echo '<select name="post_type">';
+		echo '<option value="">' . esc_html__( 'All post types', 'fusion' ) . '</option>';
+		foreach( $this->get_unified_post_types() as $post_type ) {
+			$post_type_obj = get_post_type_object( $post_type );
+			echo '<option value="' . esc_attr( $post_type ) . '">' . esc_html( $post_type_obj->labels->name ) . '</option>';
+		}
+		echo '</select>';
 
 	}
 
