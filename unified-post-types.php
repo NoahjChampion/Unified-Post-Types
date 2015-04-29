@@ -157,7 +157,7 @@ class Unified_Post_Types {
 		foreach( $this->get_unified_post_types() as $post_type ) {
 			$post_type_obj = get_post_type_object( $post_type );
 			echo '<option';
-			if ( $post_type === $_GET['post_type'] ) {
+			if ( ! empty( $_GET['post_type'] ) && is_string( $_GET['post_type'] ) && $post_type === $_GET['post_type'] ) {
 				echo ' selected="selected"';
 			}
 			echo ' value="' . esc_attr( $post_type ) . '">' . esc_html( $post_type_obj->labels->name ) . '</option>';
