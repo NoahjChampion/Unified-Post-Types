@@ -10,6 +10,8 @@ Text Domain: unified-post-types
 Domain Path: /languages
 */
 
+define( 'UNIFIED_POST_TYPES_VERSION', '0.1-alpha' );
+
 class Unified_Post_Types {
 
 	private static $instance;
@@ -31,6 +33,7 @@ class Unified_Post_Types {
 	private function setup_actions() {
 		add_action( 'pre_get_posts', array( $this, 'action_pre_get_posts' ) );
 		add_action( 'wp', array( $this, 'action_wp_reset_primary_post_type' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'action_admin_enqueue_scripts' ) );
 		add_action( 'admin_menu', array( $this, 'action_admin_menu_late' ), 100 );
 		add_action( 'restrict_manage_posts', array( $this, 'action_restrict_manage_posts' ), 9 ); // More important than other filtering
 	}
@@ -109,6 +112,18 @@ class Unified_Post_Types {
 			$post_type = $this->get_primary_post_type();
 		}
 
+	}
+
+	/**
+	 * Let the JS hacks begin!
+	 */
+	public function action_admin_enqueue_scripts() {
+
+		if ( ! $this->is_unified_post_type_screen() ) {
+			return;
+		}
+
+		wp_enqueue_script( 'unified-post-types', plugins_url( 'assets/js/unified-post-types.js', __FILE__ ), array( 'jquery' ), UNIFIED_POST_TYPES_VERSION );
 	}
 
 	/**
