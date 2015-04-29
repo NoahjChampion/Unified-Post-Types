@@ -169,7 +169,7 @@ class Unified_Post_Types {
 		echo '<label class="screen-reader-text" for="post_type">' . esc_html__( 'Filter by post type', 'unified-post-types' ) . '</label>';
 		echo '<select name="post_type">';
 		echo '<option value="">' . esc_html__( 'All post types', 'fusion' ) . '</option>';
-		foreach( $this->get_unified_post_types() as $post_type ) {
+		foreach ( $this->get_unified_post_types() as $post_type ){
 			$post_type_obj = get_post_type_object( $post_type );
 			echo '<option';
 			if ( ! empty( $_GET['post_type'] ) && is_string( $_GET['post_type'] ) && $post_type === $_GET['post_type'] ) {
