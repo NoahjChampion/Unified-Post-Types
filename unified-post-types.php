@@ -33,6 +33,7 @@ class Unified_Post_Types {
 	private function setup_actions() {
 		add_action( 'pre_get_posts', array( $this, 'action_pre_get_posts' ) );
 		add_action( 'wp', array( $this, 'action_wp_reset_primary_post_type' ) );
+		add_action( 'load-edit.php', array( $this, 'action_load_edit_reset_primary_post_type' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'action_admin_enqueue_scripts' ) );
 		add_action( 'admin_menu', array( $this, 'action_admin_menu_late' ), 100 );
 		add_action( 'restrict_manage_posts', array( $this, 'action_restrict_manage_posts' ), 9 ); // More important than other filtering
@@ -107,9 +108,27 @@ class Unified_Post_Types {
 	public function action_wp_reset_primary_post_type( $wp ) {
 		global $post_type;
 
-		if ( ! empty( $this->global_post_type_needs_reset ) && $this->is_unified_post_type_screen() ) {
+		if ( $this->is_unified_post_type_screen()
+			&& ( ! empty( $this->global_post_type_needs_reset ) || ( isset( $_GET['post_type'] ) && empty( $_GET['post_type'] ) ) ) ) {
 			$this->global_post_type_needs_reset = false;
 			$post_type = $this->get_primary_post_type();
+		}
+
+	}
+
+	/**
+	 * Resets $typenow if the GET['post_type'] is empty, which core doesn't like
+	 */
+	public function action_load_edit_reset_primary_post_type() {
+		global $typenow, $pagenow;
+
+		if ( 'edit.php' !== $pagenow ) {
+			return;
+		}
+
+		if ( isset( $_GET['post_type'] ) && empty( $_GET['post_type'] ) ) {
+			$typenow = $this->get_primary_post_type();
+			set_current_screen( 'edit-' . $typenow );
 		}
 
 	}
